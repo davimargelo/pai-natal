@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset=utf-8>
+  <title>Animacao 3D</title>
+  <style>
+    body {
+      text-align: center;
+    }
+
+    #container {
+      position: fixed;
+      background-image: url('./feliz-natal-capa.jpg');
+      background-size: contain;
+      background-repeat: no-repeat;
+      width: 70%;
+      height: auto;
+    }
+  </style>
+</head>
+
+<p style="text-align:center;"> Davi Margelo Acorsi </p>
+
+<body>
+
+  <div id="container"></div>
+
+  <script src="three.js">    </script>
+  <script src="OrbitControls.js"></script>
+
+  <script>
+
+    var container;
+    var camera, scene, renderer;
+    var a;
+    a = 1;
+
+    init();
+    animate();
+
+    function init() {
+      container = document.getElementById('container');
+
+      camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 3000);
+      camera.position.z = 10;
+
+      scene = new THREE.Scene();
+
+      ///////////////  FIGURAS /////////////////////////////
+
+      const geometryEsphere = new THREE.SphereGeometry(1, 32, 32);
+      const geometryEsphere2 = new THREE.SphereGeometry(0.7, 32, 32);
+      const geometryEsphereEye = new THREE.SphereGeometry(0.1, 32, 32);
+      const geometryCone = new THREE.ConeGeometry(0.1, 1, 32);
+
+      const materialOrange = new THREE.MeshBasicMaterial({ color: 0xff8000  });
+      const materialWhite = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      const materialBlack = new THREE.MeshBasicMaterial({ color: 0x000000 });
+
+      const wireframeMaterial = new THREE.MeshBasicMaterial({ color: 0xdddddd, wireframe: true });
+      const wireframeMaterialCone = new THREE.MeshBasicMaterial({ color: 0xff9000, wireframe: true });
+
+      var grupo = new THREE.Mesh(geometryEsphere, materialWhite);
+      const wireframe1 = new THREE.Mesh(geometryEsphere, wireframeMaterial);
+      // grupo.add(wireframe1);
+
+      const mesh1 = new THREE.Mesh(geometryEsphere, materialWhite);
+      mesh1.material.side = THREE.BackSide; // back faces
+      grupo.add(mesh1);
+
+      var sup = new THREE.Mesh(geometryEsphere2, materialWhite);
+      const wireframe2 = new THREE.Mesh(geometryEsphere2, wireframeMaterial);
+      // sup.add(wireframe2);
+
+      const mesh2 = new THREE.Mesh(geometryEsphere2, materialWhite);
+      mesh1.material.side = THREE.BackSide; // back faces
+      sup.add(mesh2);
+
+      var supCone = new THREE.Mesh(geometryCone, geometryCone);
+      const meshCone = new THREE.Mesh(geometryCone, materialOrange);
+      const wireframeCone = new THREE.Mesh(geometryCone, wireframeMaterialCone);      
+      mesh2.material.side = THREE.BackSide; // back faces
+      supCone.add(meshCone);
+      // supCone.add(wireframeCone);
+
+      var supEye = new THREE.Mesh(geometryEsphereEye, materialBlack);
+      const meshEye = new THREE.Mesh(geometryEsphereEye, materialBlack);
+      mesh2.material.side = THREE.BackSide; // back faces
+      supEye.add(meshEye);
+
+      var supEye2 = new THREE.Mesh(geometryEsphereEye, materialBlack);
+      const meshEye2 = new THREE.Mesh(geometryEsphereEye, materialBlack);
+      mesh2.material.side = THREE.BackSide; // back faces
+      supEye2.add(meshEye2);
+
+      sup.position.y = 1.5;
+      sup.rotation.x = Math.PI;
+
+      supCone.position.y = 1.8;
+      supCone.position.z = 1;
+      supCone.rotation.x = Math.PI / 3;
+
+      supEye.position.y = 1.8;
+      supEye.position.z = 0.5;
+      supEye.position.x = 0.3;
+
+      supEye2.position.y = 1.8;
+      supEye2.position.z = 0.5;
+      supEye2.position.x = -0.3;
+
+      grupo.add(sup);
+      grupo.add(supCone);
+      grupo.add(supEye);
+      grupo.add(supEye2);
+
+      scene.add(grupo);
+      renderer = new THREE.WebGLRenderer({ alpha: true });
+      renderer.setClearColor(0xffffff, 0);
+      renderer.setPixelRatio(window.devicePixelRatio);
+      container.appendChild(renderer.domElement);
+
+
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      onWindowResize();
+    }
+
+
+    function onWindowResize(event) {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+
+    function animate() {
+      // requestAnimationFrame(animate);
+      render();
+    }
+
+
+    function render() {
+      var grupo = scene.children[0];
+
+      grupo.rotation.x += 0.01;
+      grupo.rotation.y += 0.01;
+      grupo.position.y += 0.01 * a;
+      if (grupo.position.y > 3) {
+        a = -1;
+      }
+
+      if (grupo.position.y < -3) {
+        a = 1;
+      }
+
+      renderer.render(scene, camera);
+    }
+
+  </script>
+
+</body>
+
+</html>
