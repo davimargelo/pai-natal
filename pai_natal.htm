@@ -14,7 +14,7 @@
       background-image: url('./feliz-natal-capa.jpg');
       background-size: contain;
       background-repeat: no-repeat;
-      width: 70%;
+      width: 80%;
       height: auto;
     }
   </style>
@@ -35,6 +35,7 @@
     var camera, scene, renderer;
     var a;
     a = 1;
+    let aux = true;
 
     init();
     animate();
@@ -53,11 +54,14 @@
       const geometryEsphere2 = new THREE.SphereGeometry(0.7, 32, 32);
       const geometryEsphereEye = new THREE.SphereGeometry(0.1, 32, 32);
       const geometryCone = new THREE.ConeGeometry(0.1, 1, 32);
+      const geometryCylinder = new THREE.CylinderGeometry(0.4, 0.4, 1, 32);
+      const geometryCylinderMini = new THREE.CylinderGeometry(0.1, 0.5, 1, 32);
 
-      const materialOrange = new THREE.MeshBasicMaterial({ color: 0xff8000  });
+      const materialOrange = new THREE.MeshBasicMaterial({ color: 0xff8000 });
       const materialWhite = new THREE.MeshBasicMaterial({ color: 0xffffff });
       const materialBlack = new THREE.MeshBasicMaterial({ color: 0x000000 });
-
+      const materialGrey = new THREE.MeshBasicMaterial({ color: 0x4D4D4D });
+      
       const wireframeMaterial = new THREE.MeshBasicMaterial({ color: 0xdddddd, wireframe: true });
       const wireframeMaterialCone = new THREE.MeshBasicMaterial({ color: 0xff9000, wireframe: true });
 
@@ -79,7 +83,7 @@
 
       var supCone = new THREE.Mesh(geometryCone, geometryCone);
       const meshCone = new THREE.Mesh(geometryCone, materialOrange);
-      const wireframeCone = new THREE.Mesh(geometryCone, wireframeMaterialCone);      
+      const wireframeCone = new THREE.Mesh(geometryCone, wireframeMaterialCone);
       mesh2.material.side = THREE.BackSide; // back faces
       supCone.add(meshCone);
       // supCone.add(wireframeCone);
@@ -93,6 +97,30 @@
       const meshEye2 = new THREE.Mesh(geometryEsphereEye, materialBlack);
       mesh2.material.side = THREE.BackSide; // back faces
       supEye2.add(meshEye2);
+
+      var supButton = new THREE.Mesh(geometryEsphereEye, materialBlack);
+      const meshButton = new THREE.Mesh(geometryEsphereEye, materialBlack);
+      mesh1.material.side = THREE.BackSide; // back faces
+      supButton.add(meshButton);
+
+      var supButton2 = new THREE.Mesh(geometryEsphereEye, materialBlack);
+      const meshButton2 = new THREE.Mesh(geometryEsphereEye, materialBlack);
+      mesh1.material.side = THREE.BackSide; // back faces
+      supButton2.add(meshButton2);
+
+      var supButton3 = new THREE.Mesh(geometryEsphereEye, materialBlack);
+      const meshButton3 = new THREE.Mesh(geometryEsphereEye, materialBlack);
+      mesh1.material.side = THREE.BackSide; // back faces
+      supButton3.add(meshButton3);
+
+      var supCylinder = new THREE.Mesh(geometryEsphereEye, materialBlack);
+      const meshCylinder = new THREE.Mesh(geometryCylinder, materialBlack);
+      mesh2.material.side = THREE.BackSide; // back faces
+      supCylinder.add(meshCylinder);
+
+      const meshCylinderMini = new THREE.Mesh(geometryCylinderMini, materialGrey);
+      mesh2.material.side = THREE.BackSide; // back faces
+      supCylinder.add(meshCylinderMini);
 
       sup.position.y = 1.5;
       sup.rotation.x = Math.PI;
@@ -109,10 +137,24 @@
       supEye2.position.z = 0.5;
       supEye2.position.x = -0.3;
 
+      supButton.position.y = 0.4;
+      supButton.position.z = 0.9;
+
+      supButton2.position.y = 0.8;
+      supButton2.position.z = 0.6;
+
+      supButton3.position.z = 1;
+
+      supCylinder.position.y = 2.6;
+
       grupo.add(sup);
       grupo.add(supCone);
       grupo.add(supEye);
       grupo.add(supEye2);
+      grupo.add(supButton);
+      grupo.add(supButton2);
+      grupo.add(supButton3);
+      grupo.add(supCylinder);
 
       scene.add(grupo);
       renderer = new THREE.WebGLRenderer({ alpha: true });
@@ -134,17 +176,27 @@
 
 
     function animate() {
-      // requestAnimationFrame(animate);
+      requestAnimationFrame(animate);
       render();
     }
 
 
     function render() {
       var grupo = scene.children[0];
+      grupo.position.y = -2;
 
-      grupo.rotation.x += 0.01;
-      grupo.rotation.y += 0.01;
-      grupo.position.y += 0.01 * a;
+      if (aux) {
+        grupo.position.x -= 0.001;
+        if (grupo.position.x < -5.0) {
+          aux = false;
+        }
+      } else {
+        grupo.position.x += 0.001;
+        if (grupo.position.x > 2.5)
+          aux = true;
+      };
+      grupo.rotation.y += 0.001;
+      // grupo.position.y += 0.01 * a;
       if (grupo.position.y > 3) {
         a = -1;
       }
