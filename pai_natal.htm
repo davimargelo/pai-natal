@@ -56,12 +56,14 @@
       const geometryCone = new THREE.ConeGeometry(0.1, 1, 32);
       const geometryCylinder = new THREE.CylinderGeometry(0.4, 0.4, 1, 32);
       const geometryCylinderMini = new THREE.CylinderGeometry(0.1, 0.5, 1, 32);
+      const geometryArms = new THREE.BoxGeometry(1.5, 0.2, 0.2);
 
       const materialOrange = new THREE.MeshBasicMaterial({ color: 0xff8000 });
       const materialWhite = new THREE.MeshBasicMaterial({ color: 0xffffff });
       const materialBlack = new THREE.MeshBasicMaterial({ color: 0x000000 });
       const materialGrey = new THREE.MeshBasicMaterial({ color: 0x4D4D4D });
-      
+      const materialBrown = new THREE.MeshBasicMaterial({ color: 0x542D0C });
+
       const wireframeMaterial = new THREE.MeshBasicMaterial({ color: 0xdddddd, wireframe: true });
       const wireframeMaterialCone = new THREE.MeshBasicMaterial({ color: 0xff9000, wireframe: true });
 
@@ -122,6 +124,17 @@
       mesh2.material.side = THREE.BackSide; // back faces
       supCylinder.add(meshCylinderMini);
 
+      var supArm1 = new THREE.Mesh(geometryArms, materialBrown);
+      const meshArm1 = new THREE.Mesh(geometryArms, materialBrown);
+      mesh1.material.side = THREE.BackSide; // back faces
+      supArm1.add(meshArm1);
+
+      var supArm2 = new THREE.Mesh(geometryArms, materialBrown);
+      const meshArm2 = new THREE.Mesh(geometryArms, materialBrown);
+      mesh1.material.side = THREE.BackSide; // back faces
+      supArm2.add(meshArm2);
+
+
       sup.position.y = 1.5;
       sup.rotation.x = Math.PI;
 
@@ -147,6 +160,12 @@
 
       supCylinder.position.y = 2.6;
 
+      supArm1.position.x = 1.2;
+      supArm1.rotation.z = Math.PI / 1.5;
+
+      supArm2.position.x = -1.2;
+      supArm2.rotation.z = - Math.PI / 1.5;
+
       grupo.add(sup);
       grupo.add(supCone);
       grupo.add(supEye);
@@ -155,6 +174,8 @@
       grupo.add(supButton2);
       grupo.add(supButton3);
       grupo.add(supCylinder);
+      grupo.add(supArm1);
+      grupo.add(supArm2);
 
       scene.add(grupo);
       renderer = new THREE.WebGLRenderer({ alpha: true });
